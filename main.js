@@ -16,24 +16,24 @@ const COLORS = [
   'Black',
 ];
 
-function getMatch(size, colors) {
-  const match = [];
+function getCombination(size, colors) {
+  const combination = [];
 
-  while (match.length !== size) {
+  while (combination.length !== size) {
     // Get random float, get first decimal as integer, convert to valid index number
     const randomIndex = Math.floor(Math.random() * 10) % colors.length;
     const color = colors[randomIndex];
 
-    if (match.indexOf(color) === -1)
-      match.push(color);
+    if (combination.indexOf(color) === -1)
+      combination.push(color);
   }
 
-  return match;
+  return combination;
 }
 
 function playGame(attempts = ATTEMPTS, size = SIZE, colors = COLORS) {
-  const match = getMatch(size, colors);
-  console.log(match);
+  const combination = getCombination(size, colors);
+  console.log(combination);
 }
 
 playGame();
