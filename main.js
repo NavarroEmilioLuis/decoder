@@ -16,6 +16,10 @@ const COLORS = [
   'Black',
 ];
 
+function isValidGame(attempts, size, colors) {
+  return true;
+}
+
 function getCombination(size, colors) {
   const combination = [];
 
@@ -31,9 +35,57 @@ function getCombination(size, colors) {
   return combination;
 }
 
+function getCombinationProps(combination) {
+  const props = {};
+
+  combination.forEach((color, i) => {
+    if (props[color])
+      props[color]++;
+    else
+      props[color] = 1;
+  });
+
+  return props;
+}
+
+function compareCombinations(a, b) {
+  const propsA = getCombinationProps(a);
+  const propsB = getCombinationProps(b);
+
+  let colorMatches = 0;
+  let positionMatches = 0;
+
+  // Check color matches
+  Object.entries(propsA).forEach(([color, amount]) => {
+    if (propsB[color]) {
+      colorMatches += Math.min(amount, propsB[color]);
+    }
+  });
+
+  // Check positional matches
+  for (let i = 0; i < a.length; i++) {
+    const colorA = a[i];
+    const colorB = b[i];
+
+    if (colorA === colorB)
+      positionMatches++;
+  }
+
+  return { colorMatches, positionMatches };
+}
+
 function playGame(attempts = ATTEMPTS, size = SIZE, colors = COLORS) {
-  const combination = getCombination(size, colors);
-  console.log(combination);
+
+  if (!isValidGame(attempts, size, colors))
+    return 1;
+
+  const combinationOne = getCombination(size, colors);
+  const combinationTwo = getCombination(size, colors);
+
+  const comparison = compareCombinations(combinationOne, combinationTwo);
+  console.log(combinationOne);
+  console.log(combinationTwo);
+  console.log(comparison);
 }
 
 playGame();
