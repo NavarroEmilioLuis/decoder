@@ -1,4 +1,10 @@
-// 1:25 PC clock
+module.exports = {
+  isValidGame,
+  getCombination,
+  getCombinationProps,
+  compareCombinations,
+  playGame,
+};
 
 // Game default parameters
 const ATTEMPTS = 12;
@@ -38,7 +44,7 @@ function getCombination(size, colors) {
 function getCombinationProps(combination) {
   const props = {};
 
-  combination.forEach((color, i) => {
+  combination.forEach(color => {
     if (props[color])
       props[color]++;
     else
@@ -88,4 +94,7 @@ function playGame(attempts = ATTEMPTS, size = SIZE, colors = COLORS) {
   console.log(comparison);
 }
 
-playGame();
+// Only run if it's called directly
+if (require.main === module) {
+  playGame();
+}
