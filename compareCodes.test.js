@@ -2,6 +2,7 @@ const { compareCodes } = require('./main');
 
 const functionName = 'compareCodes';
 console.log(`Test ${functionName} function`);
+
 const testCases = [
   // Correctly handles color and position matches 0-2
   {
