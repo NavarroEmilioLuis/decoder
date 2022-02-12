@@ -1,6 +1,6 @@
-const { compareCombinations } = require('./main');
+const { compareCodes } = require('./main');
 
-const functionName = 'compareCombinations';
+const functionName = 'compareCodes';
 console.log(`Test ${functionName} function`);
 const testCases = [
   // Correctly handles color and position matches 0-2
@@ -30,7 +30,7 @@ const testCases = [
     b: ['Red', 'Red', 'Green', 'Yellow'],
     expected: { colorMatches: 3, positionMatches: 3 },
   },
-  // Handles various combination sizes 5-6
+  // Handles various code sizes 5-6
   {
     a: ['Red', 'Blue', 'Green', 'Yellow', 'Pink'],
     b: ['Blue', 'Red', 'Green', 'Yellow', 'Purple'],
@@ -44,7 +44,7 @@ const testCases = [
 ];
 
 testCases.forEach(({ a, b, expected }, i) => {
-  const result = compareCombinations(a, b);
+  const result = compareCodes(a, b);
   const colorErrorMsg = `Test case ${i} color match failed.`;
   const positionErrorMsg = `Test case ${i} position match failed.`;
   console.assert(result.colorMatches === expected.colorMatches, colorErrorMsg);

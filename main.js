@@ -1,8 +1,8 @@
 module.exports = {
   isValidGame,
-  getCombination,
-  getCombinationProps,
-  compareCombinations,
+  getCode,
+  getCodeProps,
+  compareCodes,
   playGame,
 };
 
@@ -37,7 +37,7 @@ function isValidGame(attempts, size, colors) {
 }
 
 /*
-  Returns a random combination with specified size,
+  Returns a random code with specified size,
   containing only specified colors. Colors may repeat.
 
   size: int
@@ -45,36 +45,36 @@ function isValidGame(attempts, size, colors) {
 
   Return value: Array<string>
 */
-function getCombination(size, colors) {
-  const combination = [];
+function getCode(size, colors) {
+  const code = [];
 
-  while (combination.length !== size) {
+  while (code.length !== size) {
     // Get random float, get first decimal as integer, convert to valid index number
     const randomIndex = Math.floor(Math.random() * 10) % colors.length;
     const color = colors[randomIndex];
 
-    if (combination.indexOf(color) === -1)
-      combination.push(color);
+    if (code.indexOf(color) === -1)
+      code.push(color);
   }
 
-  return combination;
+  return code;
 }
 
 /*
-  Helper function for compareCombinations.
+  Helper function for compareCodes.
   Returns properties of the colors contained
-  inside a combination. The shape of the properties
+  inside a code. The shape of the properties
   are the colors as keys and the number of appearances 
   as values.
 
-  combination: Array<string>
+  code: Array<string>
 
   Return value: Object {}
 */
-function getCombinationProps(combination) {
+function getCodeProps(code) {
   const props = {};
 
-  combination.forEach(color => {
+  code.forEach(color => {
     if (props[color])
       props[color]++;
     else
@@ -86,7 +86,7 @@ function getCombinationProps(combination) {
 
 /*
   Returns the result of comparing two
-  combinations (a, b). Includes the number of
+  codes (a, b). Includes the number of
   color matches and the number of
   position matches.
 
@@ -94,9 +94,9 @@ function getCombinationProps(combination) {
 
   Return value: Object {}
 */
-function compareCombinations(a, b) {
-  const propsA = getCombinationProps(a);
-  const propsB = getCombinationProps(b);
+function compareCodes(a, b) {
+  const propsA = getCodeProps(a);
+  const propsB = getCodeProps(b);
 
   let colorMatches = 0;
   let positionMatches = 0;
@@ -129,12 +129,12 @@ function playGame(attempts = ATTEMPTS, size = SIZE, colors = COLORS) {
     return 1;
   }
 
-  const combinationOne = getCombination(size, colors);
-  const combinationTwo = getCombination(size, colors);
+  const codeOne = getCode(size, colors);
+  const codeTwo = getCode(size, colors);
 
-  const comparison = compareCombinations(combinationOne, combinationTwo);
-  console.log(combinationOne);
-  console.log(combinationTwo);
+  const comparison = compareCodes(codeOne, codeTwo);
+  console.log(codeOne);
+  console.log(codeTwo);
   console.log(comparison);
 }
 
