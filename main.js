@@ -42,10 +42,11 @@ function isValidGame(attempts, size, colors) {
 
   size: int
   colors: Array<string>
+  canRepeat: boolean
 
   Return value: Array<string>
 */
-function getCode(size, colors) {
+function getCode(size, colors, canRepeat = true) {
   const code = [];
 
   while (code.length !== size) {
@@ -53,7 +54,10 @@ function getCode(size, colors) {
     const randomIndex = Math.floor(Math.random() * 10) % colors.length;
     const color = colors[randomIndex];
 
-    if (code.indexOf(color) === -1)
+    if (canRepeat)
+      code.push(color);
+    // Don't allow duplicates
+    else if (code.indexOf(color) === -1)
       code.push(color);
   }
 
