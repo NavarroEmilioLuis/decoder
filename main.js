@@ -22,10 +22,29 @@ const COLORS = [
   'Black',
 ];
 
+/*
+  Validates all 3 params used to create a game
+  are valid.
+
+  attempts: int
+  size: int
+  colors: Array<string>
+
+  Return value: boolean
+*/
 function isValidGame(attempts, size, colors) {
   return true;
 }
 
+/*
+  Returns a random combination with specified size,
+  containing only specified colors. Colors may repeat.
+
+  size: int
+  colors: Array<string>
+
+  Return value: Array<string>
+*/
 function getCombination(size, colors) {
   const combination = [];
 
@@ -41,6 +60,17 @@ function getCombination(size, colors) {
   return combination;
 }
 
+/*
+  Helper function for compareCombinations.
+  Returns properties of the colors contained
+  inside a combination. The shape of the properties
+  are the colors as keys and the number of appearances 
+  as values.
+
+  combination: Array<string>
+
+  Return value: Object {}
+*/
 function getCombinationProps(combination) {
   const props = {};
 
@@ -54,6 +84,16 @@ function getCombinationProps(combination) {
   return props;
 }
 
+/*
+  Returns the result of comparing two
+  combinations (a, b). Includes the number of
+  color matches and the number of
+  position matches.
+
+  a, b: Array<string>
+
+  Return value: Object {}
+*/
 function compareCombinations(a, b) {
   const propsA = getCombinationProps(a);
   const propsB = getCombinationProps(b);
@@ -80,10 +120,14 @@ function compareCombinations(a, b) {
   return { colorMatches, positionMatches };
 }
 
+// Main function to start a new game
 function playGame(attempts = ATTEMPTS, size = SIZE, colors = COLORS) {
 
-  if (!isValidGame(attempts, size, colors))
+  // Validate params
+  if (!isValidGame(attempts, size, colors)) {
+    console.log('Game is not valid.');
     return 1;
+  }
 
   const combinationOne = getCombination(size, colors);
   const combinationTwo = getCombination(size, colors);
