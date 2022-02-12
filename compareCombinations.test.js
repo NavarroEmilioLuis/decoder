@@ -1,6 +1,7 @@
 const { compareCombinations } = require('./main');
 
-console.log('Test compareCombinations function');
+const functionName = 'compareCombinations';
+console.log(`Test ${functionName} function`);
 const testCases = [
   // Correctly handles color and position matches 0-2
   {
@@ -49,3 +50,5 @@ testCases.forEach(({ a, b, expected }, i) => {
   console.assert(result.colorMatches === expected.colorMatches, colorErrorMsg);
   console.assert(result.positionMatches === expected.positionMatches, positionErrorMsg);
 });
+
+console.log(`Finished tests for ${functionName} function`);
