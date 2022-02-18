@@ -45,7 +45,7 @@ function isValidGame(attempts, size, colors) {
   // Ensure colors is an array with length
   if (!Array.isArray(colors) || colors.length === 0)
     return false;
-  
+
   // Ensure all colors are strings
   for (let i = 0; i < colors.length; i++) {
     const color = colors[i];
