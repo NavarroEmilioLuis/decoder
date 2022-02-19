@@ -1,4 +1,4 @@
-const { getCode } = require('./main');
+const { getCode } = require('../main');
 
 const functionName = 'getCode';
 console.log(`Test ${functionName} function`);

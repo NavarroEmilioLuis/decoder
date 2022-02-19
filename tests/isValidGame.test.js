@@ -1,4 +1,4 @@
-const { isValidGame } = require('./main');
+const { isValidGame } = require('../main');
 
 const functionName = 'isValidGame';
 console.log(`Test ${functionName} function`);

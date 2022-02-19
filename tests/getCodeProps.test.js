@@ -1,4 +1,4 @@
-const { getCodeProps } = require('./main');
+const { getCodeProps } = require('../main');
 
 const functionName = 'getCodeProps';
 console.log(`Test ${functionName} function`);
