@@ -170,8 +170,7 @@ async function getInput(size, colors, promptFn) {
 // Main function to start a new game
 async function playGame(attempts = ATTEMPTS, size = SIZE, colors = COLORS) {
   // Insert newline and current settings
-  console.log(' ');
-  console.log('Starting game with properties:');
+  console.log('\nStarting game with properties:');
   console.log(`- Possible attempts: ${attempts}`);
   console.log(`- Code size: ${size}`);
   console.log(`- Possible colors: ${colors.join(', ')}`);
@@ -194,8 +193,7 @@ async function playGame(attempts = ATTEMPTS, size = SIZE, colors = COLORS) {
 
   // Guess the code within specified number of attempts
   for (let i = 0; i < attempts; i++) {
-    console.log(' ');
-    console.log(`Attempt #${i + 1}`);
+    console.log(`\nAttempt #${i + 1}`);
 
     // Get user guess
     readlineInterface.resume();
