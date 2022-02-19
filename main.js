@@ -6,6 +6,9 @@ module.exports = {
   playGame,
 };
 
+const readline = require('readline');
+const { stdin: input, stdout: output } = require('process');
+
 // Game default parameters
 const ATTEMPTS = 12;
 const SIZE = 4;
@@ -146,8 +149,32 @@ function compareCodes(a, b) {
   return { colorMatches, positionMatches };
 }
 
+async function getInput(size, colors, promptFn) {
+  const codeGuess = [];
+  console.log('Guess code:');
+
+  while (codeGuess.length < size) {
+    const color = await promptFn(`${codeGuess.length + 1} - `);
+
+    // Add color or log error
+    if (colors.includes(color)) {
+      codeGuess.push(color);
+    } else {
+      console.log('Invalid code item, please try again');
+    }
+  }
+
+  return codeGuess;
+}
+
 // Main function to start a new game
-function playGame(attempts = ATTEMPTS, size = SIZE, colors = COLORS) {
+async function playGame(attempts = ATTEMPTS, size = SIZE, colors = COLORS) {
+  // Insert newline and current settings
+  console.log(' ');
+  console.log('Starting game with properties:');
+  console.log(`- Possible attempts: ${attempts}`);
+  console.log(`- Code size: ${size}`);
+  console.log(`- Possible colors: ${colors.join(', ')}`);
 
   // Validate params
   if (!isValidGame(attempts, size, colors)) {
@@ -155,13 +182,49 @@ function playGame(attempts = ATTEMPTS, size = SIZE, colors = COLORS) {
     return 1;
   }
 
-  const codeOne = getCode(size, colors);
-  const codeTwo = getCode(size, colors);
+  // Create interface and helper function to read user input
+  const readlineInterface = readline.createInterface({ input, output });
 
-  const comparison = compareCodes(codeOne, codeTwo);
-  console.log(codeOne);
-  console.log(codeTwo);
-  console.log(comparison);
+  // Avoid callback style for reading lines with a promise
+  const promptFn = async question => new Promise(resolve => readlineInterface.question(question, resolve));
+
+  // Get code to break and keep track of game
+  let hasWon = false;
+  const code = getCode(size, colors);
+
+  // Guess the code within specified number of attempts
+  for (let i = 0; i < attempts; i++) {
+    console.log(' ');
+    console.log(`Attempt #${i + 1}`);
+
+    // Get user guess
+    readlineInterface.resume();
+    const codeGuess = await getInput(size, colors, promptFn);
+    readlineInterface.pause();
+
+    // Compare and log results
+    const { colorMatches, positionMatches} = compareCodes(code, codeGuess);
+    console.log(`You matched ${colorMatches} colors and ${positionMatches} positions`);
+
+    // Code has been guessed
+    if (positionMatches === size) {
+      console.log(`Cracked the code in ${i + 1} attempts`);
+      hasWon = true;
+      break;
+    }
+  }
+
+  // Log results
+  if (hasWon) {
+    console.log('You won!');
+  } else {
+    console.log('You lose!');
+    console.log(`Code was ${code.join(', ')}`);
+  }
+
+  // Game ended
+  readlineInterface.close();
+  return 0;
 }
 
 // Only run if it's called directly
