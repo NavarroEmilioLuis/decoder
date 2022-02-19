@@ -30,16 +30,16 @@ After that, you'll get information about how many colors were matched and how ma
 
 ### Colors
 
-- 'Blue'
-- 'Green'
-- 'Yellow'
-- 'Red'
-- 'Purple'
-- 'Brown'
-- 'Orange'
-- 'Pink'
-- 'White'
-- 'Black'
+- Blue
+- Green
+- Yellow
+- Red
+- Purple
+- Brown
+- Orange
+- Pink
+- White
+- Black
 
 ## Up next
 
