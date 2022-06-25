@@ -43,5 +43,4 @@ After that, you'll get information about how many colors were matched and how ma
 
 ## Up next
 
-- Extend the game to be configurable from the CLI.
 - Allow blanks in the code (configurable).

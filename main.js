@@ -159,26 +159,41 @@ function compareCodes(a, b) {
 
 // Returns game configuration params based on game type
 function getGameConfig(gameType) {
-  return { attempts: ATTEMPTS, size: SIZE, colors: COLORS };
+  switch (gameType) {
+    case GAME_TYPES.NORMAL:
+      return { attempts: ATTEMPTS, size: SIZE, colors: COLORS };
+  }
 }
 
 // Asks the user which type of game to play
 async function getGameType(readlineInterface, promptFn) {
+  readlineInterface.resume();
   console.log(`Available game types: ${GAME_TYPES_STRING}`);
   let gameType = null;
 
   while (gameType === null) {
-    readlineInterface.resume();
     const userInput = await promptFn('Select type of game: ');
     if (GAME_TYPES_VALUES.includes(userInput)) {
       gameType = userInput;
     } else {
       console.log(`Invalid game type, please select a valid game type: ${GAME_TYPES_STRING}`);
     }
-    readlineInterface.pause();
   }
+  readlineInterface.pause();
 
   return gameType;
+}
+
+// Creates a custom configuration based on user input
+async function getCustomConfig(readlineInterface, promptFn) {
+  readlineInterface.resume();
+  console.log('The number of attempts needs to be at least 1.');
+  const attempts = await promptFn('Select a number of attempts: ');
+  console.log('The size of the code has to be in the range of 1 to 16');
+  const size = await promptFn('Select the size of the code: ');
+  readlineInterface.pause();
+
+  return { attempts: parseInt(attempts, 10), size: parseInt(size, 10), colors: COLORS };
 }
 
 // Gets the user prompt and returns a code guess
@@ -210,7 +225,9 @@ async function playGame() {
 
   //Ask user for game configuration
   const gameType = await getGameType(readlineInterface, promptFn);
-  const { attempts, size, colors } = getGameConfig(gameType);
+  const { attempts, size, colors } = gameType === GAME_TYPES.CUSTOM
+    ? await getCustomConfig(readlineInterface, promptFn)
+    : getGameConfig(gameType);
 
   // Insert newline and current settings
   console.log('\nStarting game with properties:');
