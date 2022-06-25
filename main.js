@@ -167,8 +167,22 @@ async function getInput(size, colors, promptFn) {
   return codeGuess;
 }
 
+// Asks the user which type of game to play
+function getGameConfig(readlineInterface, promptFn) {
+  return { attempts: ATTEMPTS, size: SIZE, colors: COLORS };
+}
+
 // Main function to start a new game
-async function playGame(attempts = ATTEMPTS, size = SIZE, colors = COLORS) {
+async function playGame() {
+  // Create interface and helper function to read user input
+  const readlineInterface = readline.createInterface({ input, output });
+
+  // Avoid callback style for reading lines with a promise
+  const promptFn = async question => new Promise(resolve => readlineInterface.question(question, resolve));
+
+  // TODO: ask user for configuration
+  const { attempts, size, colors } = getGameConfig(readlineInterface, promptFn);
+
   // Insert newline and current settings
   console.log('\nStarting game with properties:');
   console.log(`- Possible attempts: ${attempts}`);
@@ -180,12 +194,6 @@ async function playGame(attempts = ATTEMPTS, size = SIZE, colors = COLORS) {
     console.log('Game is not valid.');
     return 1;
   }
-
-  // Create interface and helper function to read user input
-  const readlineInterface = readline.createInterface({ input, output });
-
-  // Avoid callback style for reading lines with a promise
-  const promptFn = async question => new Promise(resolve => readlineInterface.question(question, resolve));
 
   // Get code to break and keep track of game
   let hasWon = false;
