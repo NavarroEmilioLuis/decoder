@@ -25,6 +25,14 @@ const COLORS = [
   'Black',
 ];
 
+// Configuration
+const GAME_TYPES = {
+  NORMAL: 'Normal',
+  CUSTOM: 'Custom',
+};
+const GAME_TYPES_VALUES = Object.values(GAME_TYPES);
+const GAME_TYPES_STRING = GAME_TYPES_VALUES.join(', ');
+
 /*
   Validates all 3 params used to create a game
   are valid.
@@ -149,6 +157,31 @@ function compareCodes(a, b) {
   return { colorMatches, positionMatches };
 }
 
+// Returns game configuration params based on game type
+function getGameConfig(gameType) {
+  return { attempts: ATTEMPTS, size: SIZE, colors: COLORS };
+}
+
+// Asks the user which type of game to play
+async function getGameType(readlineInterface, promptFn) {
+  console.log(`Available game types: ${GAME_TYPES_STRING}`);
+  let gameType = null;
+
+  while (gameType === null) {
+    readlineInterface.resume();
+    const userInput = await promptFn('Select type of game: ');
+    if (GAME_TYPES_VALUES.includes(userInput)) {
+      gameType = userInput;
+    } else {
+      console.log(`Invalid game type, please select a valid game type: ${GAME_TYPES_STRING}`);
+    }
+    readlineInterface.pause();
+  }
+
+  return gameType;
+}
+
+// Gets the user prompt and returns a code guess
 async function getInput(size, colors, promptFn) {
   const codeGuess = [];
   console.log('Guess code:');
@@ -167,11 +200,6 @@ async function getInput(size, colors, promptFn) {
   return codeGuess;
 }
 
-// Asks the user which type of game to play
-function getGameConfig(readlineInterface, promptFn) {
-  return { attempts: ATTEMPTS, size: SIZE, colors: COLORS };
-}
-
 // Main function to start a new game
 async function playGame() {
   // Create interface and helper function to read user input
@@ -180,8 +208,9 @@ async function playGame() {
   // Avoid callback style for reading lines with a promise
   const promptFn = async question => new Promise(resolve => readlineInterface.question(question, resolve));
 
-  // TODO: ask user for configuration
-  const { attempts, size, colors } = getGameConfig(readlineInterface, promptFn);
+  //Ask user for game configuration
+  const gameType = await getGameType(readlineInterface, promptFn);
+  const { attempts, size, colors } = getGameConfig(gameType);
 
   // Insert newline and current settings
   console.log('\nStarting game with properties:');
