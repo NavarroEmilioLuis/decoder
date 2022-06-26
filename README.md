@@ -40,7 +40,3 @@ After that, you'll get information about how many colors were matched and how ma
 - Pink
 - White
 - Black
-
-## Up next
-
-- Allow blanks in the code (configurable).

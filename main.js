@@ -24,6 +24,7 @@ const COLORS = [
   'White',
   'Black',
 ];
+const BLANK_TOKEN = '_';
 
 // Configuration
 const GAME_TYPES = {
@@ -161,7 +162,13 @@ function compareCodes(a, b) {
 function getGameConfig(gameType) {
   switch (gameType) {
     case GAME_TYPES.NORMAL:
-      return { attempts: ATTEMPTS, size: SIZE, colors: COLORS };
+      return {
+        attempts: ATTEMPTS,
+        size: SIZE,
+        colors: COLORS,
+        allowRepeat: true,
+        allowBlank: false,
+      };
   }
 }
 
@@ -191,9 +198,17 @@ async function getCustomConfig(readlineInterface, promptFn) {
   const attempts = await promptFn('Select a number of attempts: ');
   console.log('The size of the code has to be in the range of 1 to 16');
   const size = await promptFn('Select the size of the code: ');
+  const allowRepeat = await promptFn('Can the code contain repeated colors? (Y/N): ');
+  const allowBlank = await promptFn('Can the code contain blanks? (Y/N): ');
   readlineInterface.pause();
 
-  return { attempts: parseInt(attempts, 10), size: parseInt(size, 10), colors: COLORS };
+  return {
+    attempts: parseInt(attempts, 10),
+    size: parseInt(size, 10),
+    colors: COLORS,
+    allowRepeat: allowRepeat.trim().toUpperCase() === 'Y' ? true : false,
+    allowBlank: allowBlank.trim().toUpperCase() === 'Y' ? true : false,
+  };
 }
 
 // Gets the user prompt and returns a code guess
@@ -225,15 +240,22 @@ async function playGame() {
 
   //Ask user for game configuration
   const gameType = await getGameType(readlineInterface, promptFn);
-  const { attempts, size, colors } = gameType === GAME_TYPES.CUSTOM
+  const { attempts, size, colors, allowRepeat, allowBlank } = gameType === GAME_TYPES.CUSTOM
     ? await getCustomConfig(readlineInterface, promptFn)
     : getGameConfig(gameType);
+
+  // Update colors to include "blank" option
+  if (allowBlank) {
+    colors.push(BLANK_TOKEN);
+  }
 
   // Insert newline and current settings
   console.log('\nStarting game with properties:');
   console.log(`- Possible attempts: ${attempts}`);
   console.log(`- Code size: ${size}`);
   console.log(`- Possible colors: ${colors.join(', ')}`);
+  console.log(`- Code can contain repeated colors: ${allowRepeat ? 'Y' : 'N'}`);
+  console.log(`- Code can contain blanks: ${allowBlank ? 'Y' : 'N'}`);
 
   // Validate params
   if (!isValidGame(attempts, size, colors)) {
@@ -243,7 +265,7 @@ async function playGame() {
 
   // Get code to break and keep track of game
   let hasWon = false;
-  const code = getCode(size, colors);
+  const code = getCode(size, colors, allowRepeat);
 
   // Guess the code within specified number of attempts
   for (let i = 0; i < attempts; i++) {
