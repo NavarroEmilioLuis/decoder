@@ -194,7 +194,7 @@ async function getGameType(readlineInterface, promptFn) {
 // Creates a custom configuration based on user input
 async function getCustomConfig(readlineInterface, promptFn) {
   readlineInterface.resume();
-  console.log('The number of attempts needs to be at least 1.');
+  console.log('The number of attempts needs to be at least 1');
   const attempts = await promptFn('Select a number of attempts: ');
   console.log('The size of the code has to be in the range of 1 to 16');
   const size = await promptFn('Select the size of the code: ');
@@ -236,7 +236,10 @@ async function playGame() {
   const readlineInterface = readline.createInterface({ input, output });
 
   // Avoid callback style for reading lines with a promise
-  const promptFn = async question => new Promise(resolve => readlineInterface.question(question, resolve));
+  const promptFn = async question => new Promise(resolve => {
+    const resolveInLowerCase = answer => resolve(answer.toLowerCase());
+    readlineInterface.question(question, resolveInLowerCase);
+  });
 
   //Ask user for game configuration
   const gameType = await getGameType(readlineInterface, promptFn);
