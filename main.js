@@ -13,23 +13,23 @@ const { stdin: input, stdout: output } = require('process');
 const ATTEMPTS = 12;
 const SIZE = 4;
 const COLORS = [
-  'Blue',
-  'Green',
-  'Yellow',
-  'Red',
-  'Purple',
-  'Brown',
-  'Orange',
-  'Pink',
-  'White',
-  'Black',
+  'blue',
+  'green',
+  'yellow',
+  'red',
+  'purple',
+  'brown',
+  'orange',
+  'pink',
+  'white',
+  'black',
 ];
 const BLANK_TOKEN = '_';
 
 // Configuration
 const GAME_TYPES = {
-  NORMAL: 'Normal',
-  CUSTOM: 'Custom',
+  NORMAL: 'normal',
+  CUSTOM: 'custom',
 };
 const GAME_TYPES_VALUES = Object.values(GAME_TYPES);
 const GAME_TYPES_STRING = GAME_TYPES_VALUES.join(', ');
